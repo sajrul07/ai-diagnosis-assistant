@@ -9,23 +9,39 @@
   <div class="form-container" id="main-content"></div>
   <script src="app.js"></script>
   <script>
-    // Personalized greeting if username is stored
     const username = localStorage.getItem('username');
+    // Build the HTML for both states
+    let html = '';
     if (isLoggedIn()) {
-      document.getElementById('main-content').innerHTML = `
+      html = `
         <h2>Welcome${username ? ', ' + username : ''}!</h2>
         <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
-        <button onclick="window.location.href='analyze.html'">Analyze</button>
+        <p style="font-size:0.95em;color:#555;">
+          <strong>About the model:</strong> This assistant uses Google Gemini AI to interpret your symptoms and provide medical insights. It is not a substitute for professional medical advice.
+        </p>
+        <button id="start-analyze-btn">Start Analyze</button>
         <button onclick="logout()">Logout</button>
       `;
     } else {
-      document.getElementById('main-content').innerHTML = `
+      html = `
         <h2>Welcome!</h2>
         <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
-        <button onclick="window.location.href='login.html'">Login</button>
-        <button onclick="window.location.href='register.html'">Register</button>
+        <p style="font-size:0.95em;color:#555;">
+          <strong>About the model:</strong> This assistant uses Google Gemini AI to interpret your symptoms and provide medical insights. It is not a substitute for professional medical advice.
+        </p>
+        <button id="start-analyze-btn" style="margin-top:16px;">Start Analyze</button>
       `;
     }
+    document.getElementById('main-content').innerHTML = html;
+
+    // Add Start Analyze button logic
+    document.getElementById('start-analyze-btn').onclick = () => {
+      if (isLoggedIn()) {
+        window.location.href = 'analyze.html';
+      } else {
+        window.location.href = 'login.html';
+      }
+    };
   </script>
 </body>
 </html>
