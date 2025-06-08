@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical ChatBot Landing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="form-container" id="main-content"></div>
+  <script src="app.js"></script>
+  <script>
+    // Personalized greeting if username is stored
+    const username = localStorage.getItem('username');
+    if (isLoggedIn()) {
+      document.getElementById('main-content').innerHTML = `
+        <h2>Welcome${username ? ', ' + username : ''}!</h2>
+        <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
+        <button onclick="window.location.href='analyze.html'">Analyze</button>
+        <button onclick="logout()">Logout</button>
+      `;
+    } else {
+      document.getElementById('main-content').innerHTML = `
+        <h2>Welcome!</h2>
+        <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
+        <button onclick="window.location.href='login.html'">Login</button>
+        <button onclick="window.location.href='register.html'">Register</button>
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.env
+*.sqlite3
+*.db
+*.log
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Frontend build artifacts (if you add any)
+dist/
+build/
+node_modules/
+
+# Ignore secrets
+*.secret
+*.key
+
+# Ignore test coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Ignore frontend cache
+.cache/

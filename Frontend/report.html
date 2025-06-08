@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagnosis Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+      background: #f9f9f9;
+    }
+    .section {
+      margin-bottom: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .label {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🩺 Diagnosis Report</h1>
+  <div id="reportContent">Loading...</div>
+  <script>
+    const data = JSON.parse(localStorage.getItem("diagnosisData"));
+
+    if (!data) {
+      document.getElementById("reportContent").innerHTML = "<p>No data available.</p>";
+    } else {
+      const reportHTML = `
+        <div class="section">
+          <p><span class="label">Disease:</span> ${data.diagnosis.disease}</p>
+          <p><span class="label">Summary:</span> ${data.diagnosis.summary}</p>
+        </div>
+        <div class="section">
+          <h3>Immediate Actions</h3>
+          <p><span class="label">Steps:</span> ${data.immediate_actions.steps.join(", ")}</p>
+        </div>
+        <div class="section">
+          <h3>Medical Recommendations</h3>
+          <p><span class="label">Specialist:</span> ${data.medical_recommendations.specialist_to_consult}</p>
+          <p><span class="label">Tests:</span> ${data.medical_recommendations.recommended_tests.join(", ")}</p>
+        </div>
+        <div class="section">
+          <h3>Risk Factors</h3>
+          <p><span class="label">Causes:</span> ${data.risk_factors.causes.join(", ")}</p>
+        </div>
+        <div class="section">
+          <h3>Prevention</h3>
+          <p><span class="label">Tips:</span> ${data.preventive_measures.prevention_tips.join(", ")}</p>
+          <p><span class="label">Lifestyle:</span> ${data.preventive_measures.lifestyle_changes.join(", ")}</p>
+        </div>
+      `;
+      document.getElementById("reportContent").innerHTML = reportHTML;
+    }
+  </script>
+</body>
+</html>

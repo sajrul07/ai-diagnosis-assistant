@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analyze - Medical ChatBot</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Analyze Medical Data</h2>
+    <form id="diagnosisForm">
+      <input id="age" type="number" placeholder="Age" required>
+      <input id="gender" placeholder="Gender" required>
+      <input id="weight" type="number" placeholder="Weight" required>
+      <input id="symptoms" placeholder="Symptoms" required>
+      <input id="history" placeholder="Medical History" required>
+      <button type="submit">Analyze</button>
+      <button type="button" onclick="logout()">Logout</button>
+      <div id="loading" class="hidden">Analyzing...</div>
+      <div id="analyze-result"></div>
+      <p><a href="landing.html">Back to Home</a></p>
+    </form>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    if (!isLoggedIn()) {
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById("diagnosisForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const formData = {
+        age: parseInt(document.getElementById("age").value, 10),
+        gender: document.getElementById("gender").value,
+        weight: parseFloat(document.getElementById("weight").value),
+        symptoms: document.getElementById("symptoms").value.trim(),
+        medical_history: document.getElementById("history").value.trim()
+      };
+
+      try {
+        document.getElementById("loading").classList.remove("hidden");
+        const result = await analyze(formData);
+        document.getElementById("loading").classList.add("hidden");
+
+        if (result.success && result.data) {
+          localStorage.setItem("diagnosisData", JSON.stringify(result.data));
+          window.open("report.html", "_blank");
+        } else {
+          document.getElementById("analyze-result").innerText = result.message;
+        }
+      } catch (error) {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("analyze-result").innerText = "Failed to get diagnosis. Try again!";
+      }
+    });
+  </script>
+</body>
+</html>

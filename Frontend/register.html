@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Medical ChatBot</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Register</h2>
+    <input id="reg-username" placeholder="Username">
+    <input id="reg-password" type="password" placeholder="Password">
+    <button id="register-btn">Register</button>
+    <div id="reg-result"></div>
+    <p><a href="login.html">Already have an account? Login</a></p>
+    <p><a href="landing.html">Back to Home</a></p>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    document.getElementById('register-btn').onclick = async () => {
+      const username = document.getElementById('reg-username').value;
+      const password = document.getElementById('reg-password').value;
+      const result = await register(username, password);
+      document.getElementById('reg-result').innerText = result.message;
+      if (result.success) {
+        setTimeout(() => window.location.href = 'login.html', 1000);
+      }
+    };
+  </script>
+</body>
+</html>
