@@ -1,47 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Medical ChatBot Landing</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="form-container" id="main-content"></div>
-  <script src="app.js"></script>
-  <script>
-    const username = localStorage.getItem('username');
-    // Build the HTML for both states
-    let html = '';
-    if (isLoggedIn()) {
-      html = `
-        <h2>Welcome${username ? ', ' + username : ''}!</h2>
-        <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
-        <p style="font-size:0.95em;color:#555;">
-          <strong>About the model:</strong> This assistant uses Google Gemini AI to interpret your symptoms and provide medical insights. It is not a substitute for professional medical advice.
-        </p>
-        <button id="start-analyze-btn">Start Analyze</button>
-        <button onclick="logout()">Logout</button>
-      `;
-    } else {
-      html = `
-        <h2>Welcome!</h2>
-        <p>This chatbot helps you analyze your symptoms and get a medical report powered by AI.</p>
-        <p style="font-size:0.95em;color:#555;">
-          <strong>About the model:</strong> This assistant uses Google Gemini AI to interpret your symptoms and provide medical insights. It is not a substitute for professional medical advice.
-        </p>
-        <button id="start-analyze-btn" style="margin-top:16px;">Start Analyze</button>
-      `;
-    }
-    document.getElementById('main-content').innerHTML = html;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedBot - AI Health Assistant</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="landing.css" />
+  </head>
+  <body>
+    <main>
+      <nav class="navbar">
+        <div class="nav-logo">MedBot AI</div>
+        <ul class="nav-links">
+          <li><a href="landing.html" class="active">Home</a></li>
+          <li><a href="analyze.html">Diagnosis</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </nav>
 
-    // Add Start Analyze button logic
-    document.getElementById('start-analyze-btn').onclick = () => {
-      if (isLoggedIn()) {
-        window.location.href = 'analyze.html';
-      } else {
-        window.location.href = 'login.html';
-      }
-    };
-  </script>
-</body>
+      <div class="container">
+        <div class="left-panel">
+          <div class="decorative-paths">
+            <svg viewBox="0 0 600 150" preserveAspectRatio="none">
+              <path
+                d="M0,100 C100,40 200,160 300,100 C400,40 500,140 600,80"
+                stroke="#ffffff"
+                stroke-opacity="0.15"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M0,60 C100,20 200,120 300,60 C400,0 500,100 600,40"
+                stroke="#ffffff"
+                stroke-opacity="0.1"
+                stroke-width="1.5"
+                fill="none"
+              />
+              <path
+                d="M0,30 C150,90 350,10 500,80"
+                stroke="#ffffff"
+                stroke-opacity="0.08"
+                stroke-width="1.2"
+                fill="none"
+              />
+            </svg>
+          </div>
+          <div class="icon-container">
+            <!-- Medical SVG Icon -->
+            <svg fill="#ffffff" viewBox="0 0 24 24">
+              <path d="M18 13h-5v5h-2v-5H6v-2h5V6h2v5h5v2z" />
+            </svg>
+          </div>
+          <h1>Welcome to MedBot</h1>
+          <p>
+            Your smart AI health companion. Analyze your symptoms and receive
+            instant, private medical insights.
+          </p>
+        </div>
+
+        <div class="right-panel">
+          <h2>Let’s Get Started</h2>
+          <p>
+            Use our AI assistant to understand your symptoms in just a few
+            clicks.
+          </p>
+          <div class="disclaimer">
+            <strong>Disclaimer:</strong> This tool uses Google Gemini AI to
+            assist with symptom analysis. It does not replace certified medical
+            professionals.
+          </div>
+          <button class="btn" id="start-analyze-btn">Start Analysis</button>
+          <div class="footer">MedBot © 2025 | Powered by Gemini AI</div>
+        </div>
+      </div>
+    </main>
+    <!-- <script src="landing_script.js"></script> -->
+    <script>
+      const username = localStorage.getItem("username");
+      document.getElementById("start-analyze-btn").onclick = () => {
+        if (username) {
+          window.location.href = "analyze.html";
+        } else {
+          window.location.href = "login.html";
+        }
+      };
+    </script>
+  </body>
 </html>

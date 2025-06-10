@@ -1,17 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Login - Medical ChatBot</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e8f0fe 0%, #f4f8fb 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-container {
+      background: #fff;
+      padding: 32px 28px 24px 28px;
+      border-radius: 16px;
+      box-shadow: 0 6px 32px rgba(10,102,194,0.10);
+      max-width: 340px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .form-container h2 {
+      color: #0A66C2;
+      margin-bottom: 18px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      border: 1px solid #c6dafc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fbff;
+      transition: border 0.2s;
+      outline: none;
+    }
+    .form-container input:focus {
+      border: 1.5px solid #0A66C2;
+      background: #fff;
+    }
+    #login-btn {
+      width: 100%;
+      padding: 10px 0;
+      background: linear-gradient(90deg, #0A66C2 60%, #4f8cff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(10,102,194,0.08);
+      transition: background 0.18s, transform 0.12s;
+    }
+    #login-btn:hover {
+      background: linear-gradient(90deg, #0056a3 60%, #3576d1 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    #login-result {
+      min-height: 18px;
+      margin-bottom: 8px;
+      color: #d32f2f;
+      font-size: 0.98rem;
+      text-align: center;
+    }
+    .form-container a {
+      color: #0A66C2;
+      text-decoration: none;
+      font-size: 0.97rem;
+      transition: color 0.15s;
+    }
+    .form-container a:hover {
+      color: #003366;
+      text-decoration: underline;
+    }
+    .form-container p {
+      margin: 6px 0 0 0;
+      width: 100%;
+      text-align: center;
+    }
+    @media (max-width: 500px) {
+      .form-container {
+        padding: 18px 6vw 14px 6vw;
+        max-width: 98vw;
+      }
+      .form-container h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Login</h2>
-    <input id="login-username" placeholder="Username">
-    <input id="login-password" type="password" placeholder="Password">
+    <input id="login-username" placeholder="Username" autocomplete="username">
+    <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
     <button id="login-btn">Login</button>
+    <div id="login-wait" style="display:none; margin-bottom:8px;">
+      <svg width="28" height="28" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" fill="none" stroke="#0A66C2" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)">
+          <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+      <span style="color:#0A66C2; font-size:1rem; margin-left:6px;">Please wait...</span>
+    </div>
     <div id="login-result"></div>
     <p><a href="register.html">Don't have an account? Register</a></p>
     <p><a href="landing.html">Back to Home</a></p>
@@ -19,12 +124,19 @@
   <script src="app.js"></script>
   <script>
     document.getElementById('login-btn').onclick = async () => {
+      document.getElementById('login-wait').style.display = 'flex';
+      document.getElementById('login-result').innerText = '';
       const username = document.getElementById('login-username').value;
       const password = document.getElementById('login-password').value;
       const result = await login(username, password);
-      document.getElementById('login-result').innerText = result.message;
+      document.getElementById('login-wait').style.display = 'none';
+
+      const resultDiv = document.getElementById('login-result');
       if (result.success) {
+        resultDiv.innerHTML = `<span style="color:#218838; background:#e6f9ea; border-radius:6px; padding:4px 12px; font-weight:600; display:inline-block;">${result.message}</span>`;
         setTimeout(() => window.location.href = 'analyze.html', 1000);
+      } else {
+        resultDiv.innerHTML = `<span style="color:#d32f2f; background:#fdeaea; border-radius:6px; padding:4px 12px; font-weight:600; display:inline-block;">${result.message}</span>`;
       }
     };
   </script>

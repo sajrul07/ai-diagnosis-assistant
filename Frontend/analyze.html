@@ -1,62 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Analyze - Medical ChatBot</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .hidden { display: none; }
-  </style>
-</head>
-<body>
-  <div class="form-container">
-    <h2>Analyze Medical Data</h2>
-    <form id="diagnosisForm">
-      <input id="age" type="number" placeholder="Age" required>
-      <input id="gender" placeholder="Gender" required>
-      <input id="weight" type="number" placeholder="Weight" required>
-      <input id="symptoms" placeholder="Symptoms" required>
-      <input id="history" placeholder="Medical History" required>
-      <button type="submit">Analyze</button>
-      <button type="button" onclick="logout()">Logout</button>
-      <div id="loading" class="hidden">Analyzing...</div>
-      <div id="analyze-result"></div>
-      <p><a href="landing.html">Back to Home</a></p>
-    </form>
-  </div>
-  <script src="app.js"></script>
-  <script>
-    if (!isLoggedIn()) {
-      window.location.href = 'login.html';
-    }
-
-    document.getElementById("diagnosisForm").addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      const formData = {
-        age: parseInt(document.getElementById("age").value, 10),
-        gender: document.getElementById("gender").value,
-        weight: parseFloat(document.getElementById("weight").value),
-        symptoms: document.getElementById("symptoms").value.trim(),
-        medical_history: document.getElementById("history").value.trim()
-      };
-
-      try {
-        document.getElementById("loading").classList.remove("hidden");
-        const result = await analyze(formData);
-        document.getElementById("loading").classList.add("hidden");
-
-        if (result.success && result.data) {
-          localStorage.setItem("diagnosisData", JSON.stringify(result.data));
-          window.open("report.html", "_blank");
-        } else {
-          document.getElementById("analyze-result").innerText = result.message;
-        }
-      } catch (error) {
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("analyze-result").innerText = "Failed to get diagnosis. Try again!";
+  <head>
+    <meta charset="UTF-8" />
+    <title>Analyze - Medical ChatBot</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        background: linear-gradient(120deg, #e8f0fe 0%, #f4f8fb 100%);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Inter', Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-    });
-  </script>
-</body>
+      .form-container {
+        background: #fff;
+        padding: 32px 28px 24px 28px;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(10,102,194,0.13);
+        max-width: 370px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 0.7s;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px);}
+        to { opacity: 1; transform: translateY(0);}
+      }
+      .form-container h2 {
+        color: #0A66C2;
+        margin-bottom: 18px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-align: center;
+      }
+      .form-container form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+        border: 1px solid #c6dafc;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #f8fbff;
+        transition: border 0.2s;
+        outline: none;
+      }
+      .form-container input:focus {
+        border: 1.5px solid #0A66C2;
+        background: #fff;
+      }
+      .form-container button[type="submit"] {
+        width: 100%;
+        padding: 10px 0;
+        background: linear-gradient(90deg, #0A66C2 60%, #4f8cff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(10,102,194,0.08);
+        transition: background 0.18s, transform 0.12s;
+      }
+      .form-container button[type="submit"]:hover {
+        background: linear-gradient(90deg, #0056a3 60%, #3576d1 100%);
+        transform: translateY(-2px) scale(1.03);
+      }
+      #loading {
+        color: #0A66C2;
+        font-size: 1.02rem;
+        margin: 8px 0 0 0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-align: center;
+        display: none; /* Hide by default, only show via JS */
+      }
+      #analyze-result {
+        min-height: 18px;
+        margin-bottom: 8px;
+        color: #d32f2f;
+        font-size: 0.98rem;
+        text-align: center;
+      }
+      .form-container p {
+        margin: 10px 0 0 0;
+        width: 100%;
+        text-align: center;
+      }
+      .form-container a {
+        color: #0A66C2;
+        text-decoration: none;
+        font-size: 0.97rem;
+        transition: color 0.15s;
+      }
+      .form-container a:hover {
+        color: #003366;
+        text-decoration: underline;
+      }
+      .form-container .tip {
+        background: #e8f0fe;
+        color: #0A66C2;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.97rem;
+        margin-bottom: 16px;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      @media (max-width: 500px) {
+        .form-container {
+          padding: 16px 4vw 12px 4vw;
+          max-width: 98vw;
+        }
+        .form-container h2 {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <div class="tip">💡 Please fill all fields accurately for best results.</div>
+      <h2>Analyze Medical Data</h2>
+      <form id="diagnosisForm" autocomplete="off">
+        <input id="patient_name" type="text" placeholder="Patient name" />
+        <input id="age" type="number" placeholder="Age" required />
+        <input id="gender" placeholder="Gender" required />
+        <input id="weight" type="number" placeholder="Weight" required />
+        <input id="symptoms" placeholder="Symptoms" required />
+        <input id="history" placeholder="Medical History" required />
+        <button type="submit">Analyze</button>
+        <div id="loading" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <svg width="28" height="28" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#0A66C2" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" transform="rotate(-90 25 25)">
+              <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <span style="color:#0A66C2; font-size:1rem;">Analyzing...</span>
+        </div>
+        <div id="analyze-result"></div>
+        <p><a href="landing.html">Back to Home</a></p>
+      </form>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      if (!isLoggedIn()) {
+        window.location.href = "login.html";
+      }
+
+      // Hide animation by default
+      document.getElementById("loading").style.display = "none";
+
+      document
+        .getElementById("diagnosisForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          // Store patient name in localStorage for report.html
+          const patientName = document.getElementById("patient_name").value;
+          localStorage.setItem("patientName", patientName);
+
+          const formData = {
+            age: parseInt(document.getElementById("age").value, 10),
+            gender: document.getElementById("gender").value,
+            weight: parseFloat(document.getElementById("weight").value),
+            symptoms: document.getElementById("symptoms").value.trim(),
+            medical_history: document.getElementById("history").value.trim(),
+          };
+
+          const loadingDiv = document.getElementById("loading");
+          loadingDiv.style.display = "flex"; // Show animation
+          document.getElementById("analyze-result").innerText = "";
+
+          try {
+            const result = await analyze(formData);
+            loadingDiv.style.display = "none"; // Hide animation
+
+            if (result.success && result.data) {
+              // Add age and gender to the result data for report.html
+              result.data.age = formData.age;
+              result.data.gender = formData.gender;
+              localStorage.setItem(
+                "diagnosisData",
+                JSON.stringify(result.data)
+              );
+              window.open("report.html", "_blank");
+            } else {
+              document.getElementById("analyze-result").innerText =
+                result.message;
+            }
+          } catch (error) {
+            loadingDiv.style.display = "none"; // Hide animation
+            document.getElementById("analyze-result").innerText =
+              "Failed to get diagnosis. Try again!";
+          }
+        });
+    </script>
+  </body>
 </html>

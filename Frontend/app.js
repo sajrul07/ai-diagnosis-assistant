@@ -1,5 +1,5 @@
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://medbot-ai-d0st.onrender.com";
 
 // --- Auth helpers ---
 function isLoggedIn() {

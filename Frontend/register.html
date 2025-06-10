@@ -1,16 +1,113 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Register - Medical ChatBot</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e8f0fe 0%, #f4f8fb 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-container {
+      background: #fff;
+      padding: 32px 28px 24px 28px;
+      border-radius: 16px;
+      box-shadow: 0 6px 32px rgba(10,102,194,0.10);
+      max-width: 340px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .form-container h2 {
+      color: #0A66C2;
+      margin-bottom: 18px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      border: 1px solid #c6dafc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fbff;
+      transition: border 0.2s;
+      outline: none;
+    }
+    .form-container input:focus {
+      border: 1.5px solid #0A66C2;
+      background: #fff;
+    }
+    #register-btn {
+      width: 100%;
+      padding: 10px 0;
+      background: linear-gradient(90deg, #0A66C2 60%, #4f8cff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(10,102,194,0.08);
+      transition: background 0.18s, transform 0.12s;
+    }
+    #register-btn:hover {
+      background: linear-gradient(90deg, #0056a3 60%, #3576d1 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    #reg-result {
+      min-height: 18px;
+      margin-bottom: 8px;
+      color: #d32f2f;
+      font-size: 0.98rem;
+      text-align: center;
+    }
+    .form-container a {
+      color: #0A66C2;
+      text-decoration: none;
+      font-size: 0.97rem;
+      transition: color 0.15s;
+    }
+    .form-container a:hover {
+      color: #003366;
+      text-decoration: underline;
+    }
+    .form-container p {
+      margin: 6px 0 0 0;
+      width: 100%;
+      text-align: center;
+    }
+    @media (max-width: 500px) {
+      .form-container {
+        padding: 18px 6vw 14px 6vw;
+        max-width: 98vw;
+      }
+      .form-container h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Register</h2>
-    <input id="reg-username" placeholder="Username">
-    <input id="reg-password" type="password" placeholder="Password">
+    <input id="reg-username" placeholder="Username" autocomplete="username">
+    <input id="reg-password" type="password" placeholder="Password" autocomplete="new-password">
     <button id="register-btn">Register</button>
     <div id="reg-result"></div>
     <p><a href="login.html">Already have an account? Login</a></p>
